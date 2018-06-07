@@ -97,3 +97,4 @@ class Creature:
     @classmethod
     def feed(cls, f: float):
         cls.fitness += f
+
