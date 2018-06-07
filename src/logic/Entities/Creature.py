@@ -10,7 +10,7 @@ class Creature:
 
     direction: float
 
-    debug_info: float
+    debug_info: [float]
 
     def __init__(self, x: float, y: float):
         self.xy = Vector2d.Vector2d(x, y)
@@ -19,26 +19,7 @@ class Creature:
 
 
 '''
-package logic.entities.creature;
 
-import logic.GameConstants;
-import logic.entities.Brain;
-import logic.entities.Vector2d;
-
-import static java.lang.Math.*;
-import static logic.GameConstants.FIELD_SIZE_X;
-import static logic.GameConstants.FIELD_SIZE_Y;
-import static logic.GameConstants.FITNESS_DEGRADATION;
-
-public class Creature extends Brain{
-    //private boolean readyToBirth = false;
-
-    private double fitness;
-    //private int age = 0;
-
-    private Vector2d xy;
-    private Vector2d speed;
-    private double direction;
     double[] info = new double[getNeuronLayers()[0].getColumnDimension() - 1];
 
     public double[] getInfo(){

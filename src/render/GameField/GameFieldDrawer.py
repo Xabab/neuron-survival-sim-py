@@ -3,7 +3,6 @@ from src.logic.Entities import Creatures, Food
 from src.render.Shapes import drawEfCircle
 
 
-
 def drawGameField():
     if len(Creatures.creatures) != 0:
         drawCreatures()
