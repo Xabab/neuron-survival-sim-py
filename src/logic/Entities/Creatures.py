@@ -6,6 +6,6 @@ from src.logic.Entities.Creature import Creature
 creatures = []
 
 
-def startSpawn(creatures = creatures):
+def startSpawn(creatures: [Creature] = creatures):
     for i in range(0, MIN_CREATURES_COUNT):
         creatures.append(Creature(random() * FIELD_SIZE_X, random() * FIELD_SIZE_Y))

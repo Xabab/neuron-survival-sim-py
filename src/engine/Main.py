@@ -15,4 +15,3 @@ Creatures.startSpawn()
 Food.startSpawn()
 
 Window.init()
-
