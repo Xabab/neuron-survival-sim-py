@@ -1,4 +1,3 @@
-from src.engine.EventsProcessing import *
 from src.render.Shapes import *
 from src.render.Text import *
 

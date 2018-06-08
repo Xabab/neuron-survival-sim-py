@@ -1,12 +1,12 @@
+from src.engine.EventsProcessing import *
 from src.engine.GameConstants import X, Y
 from src.gui.Gui import drawGui
+from src.render.GameField import GameFieldDrawer
 from src.render.GameField.GameFieldDrawer import drawGameField
 from src.render.Shapes import *
-from src.render.Text import text
-from src.engine.EventsProcessing import *
 
 
-def init():
+def start():
     if not glfw.init():
         return
 
@@ -38,6 +38,10 @@ def init():
 
 
     while not glfw.window_should_close(_window):
+        print('render')
+
+        GameFieldDrawer.g.update()
+
         glClear(GL_COLOR_BUFFER_BIT)
 
         ##### RENDER HERE #####

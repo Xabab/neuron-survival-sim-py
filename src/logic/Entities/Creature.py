@@ -1,16 +1,15 @@
 import copy
+from random import uniform as random
 
 import numpy as np
 from numpy.core.umath import pi
-from numpy.random import random
 
 from src.engine.GameConstants import *
 from src.logic.Entities.Brain import Brain
 from src.logic.Vector2d import Vector2d
 
 
-class Creature:
-
+class Creature(object):
     xy: Vector2d
     speed: Vector2d
 
@@ -22,79 +21,69 @@ class Creature:
 
     brain: Brain
 
-    @classmethod
-    def __init__(cls, x: float = random() * FIELD_SIZE_X, y: float = random() * FIELD_SIZE_Y):
-        cls.xy = Vector2d(x, y)
-        cls.speed = Vector2d(0., 0.)
+    def __init__(self, x: float = random(0, 1) * FIELD_SIZE_X, y: float = random(0, 1) * FIELD_SIZE_Y):
+        self.xy = Vector2d(x, y)
+        self.speed = Vector2d(0., 0.)
 
-        cls.fitness = STARTING_FITNESS
+        self.fitness = STARTING_FITNESS
 
-        cls.direction = ((random() * 2) - 1) * pi * 2
+        self.direction = ((random(0, 1) * 2) - 1) * pi * 2
 
-        cls.brain = Brain(["Food dist", "Food dir", "Fitness", "Speed"], ["Eat", "Accelerate", "Turn", "Birth"])
-        cls.brain.initRandom()
+        self.brain = Brain(["Food dist", "Food dir", "Fitness", "Speed"], ["Eat", "Accelerate", "Turn", "Birth"])
+        self.brain.initRandom()
 
-        cls.debug_info = [None, None, None, None]
+        self.debug_info = [None, None, None, None]
 
-    @classmethod
-    def Child(cls):
-        temp = copy.deepcopy(cls)
+    def Child(self):
+        temp = copy.deepcopy(self)
 
         temp.speed = Vector2d(0., 0.)
         temp.fitness = STARTING_FITNESS
-        temp.direction = ((random() * 2) - 1) * pi * 2
+        temp.direction = ((random(0, 1) * 2) - 1) * pi * 2
         temp.brain.mutate()
 
         return temp
 
-    @classmethod
-    def giveBirth(cls):
-        cls.fitness -= BIRTH_FITNESS_COST
+    def giveBirth(self):
+        self.fitness -= BIRTH_FITNESS_COST
 
-        return cls.Child()
+        return self.Child()
 
-    @classmethod
-    def updateInfo(cls, inputs: [float]):
-        cls.debug_info = inputs
+    def updateInfo(self, inputs: [float]):
+        self.debug_info = inputs
 
-    @classmethod
-    def updateMoving(cls):
-        cls.direction += CREATURE_TURNING_SPEED * cls.brain.neuronLayers[len(cls.brain.neuronLayers) - 1][0][1]
+    def updateMoving(self):
+        self.direction += CREATURE_TURNING_SPEED * self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][2]
 
-        if cls.direction > pi: cls.direction -= 2 * pi;
-        if cls.direction < -pi: cls.direction += 2 * pi;
+        if self.direction > pi: self.direction -= 2 * pi;
+        if self.direction < -pi: self.direction += 2 * pi;
 
-        x = cls.speed.x * (1 - SURFACE_ROUGHNESS) + ACCELERATION * \
-            cls.brain.neuronLayers[len(cls.brain.neuronLayers) - 1][0][0] * np.cos(cls.direction)
-        y = cls.speed.y * (1 - SURFACE_ROUGHNESS) + ACCELERATION * \
-            cls.brain.neuronLayers[len(cls.brain.neuronLayers) - 1][0][0] * np.sin(cls.direction)
+        x = self.speed.x * (1 - SURFACE_ROUGHNESS) + ACCELERATION * \
+            self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][1] * np.cos(self.direction)
+        y = self.speed.y * (1 - SURFACE_ROUGHNESS) + ACCELERATION * \
+            self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][1] * np.sin(self.direction)
         speed = np.sqrt(x * x + y * y)
 
         if speed > CREATURE_SPEED:
             x *= CREATURE_SPEED / speed
             y *= CREATURE_SPEED / speed
 
-        cls.speed.x = x
-        cls.speed.y = y
+        self.speed.x = x
+        self.speed.y = y
 
-        cls.fitness -= abs(cls.brain.neuronLayers[len(cls.brain.neuronLayers) - 1][0][1]) * FOOD_PER_RAD \
-                       + speed * FOOD_PER_PX + FITNESS_DEGRADATION
+        self.fitness -= abs(self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][1]) * FOOD_PER_RAD \
+                        + speed * FOOD_PER_PX + FITNESS_DEGRADATION
 
-    @classmethod
-    def move(cls):
-        cls.xy.add(cls.speed)
+    def move(self):
+        self.xy.add(self.speed)
 
-    @classmethod
-    def updateInputs(cls, input: []):
-        cls.brain.updateInputs(input)
+    def updateInputs(self, input: []):
+        self.brain.updateInputs(input)
 
-    @classmethod
-    def updateCreature(cls):
-        cls.brain.calculate()
-        cls.updateMoving()
-        cls.move()
+    def updateCreature(self):
+        self.brain.calculate()
+        self.updateMoving()
+        self.move()
 
-    @classmethod
-    def feed(cls, f: float):
-        cls.fitness += f
-
+    def feed(self, f: float):
+        self.fitness += f

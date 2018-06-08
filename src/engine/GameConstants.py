@@ -8,7 +8,7 @@ FOOD_PER_PX = 0.2 * SPEED_HACK
 # AGING = 1 * SPEED_HACK;
 FITNESS_DEGRADATION = 0.02 * SPEED_HACK
 FOOD_PER_RAD = 2 * SPEED_HACK
-MIN_CREATURES_COUNT = 20
+MIN_CREATURES_COUNT = 50
 FOOD_COUNT = 50
 CREATURE_SPEED = 0.7 * SPEED_HACK                                 # own sizes /s
 CREATURE_TURNING_SPEED = 0.7 * SPEED_HACK                         # rads / s
@@ -26,5 +26,4 @@ FIELD_SIZE_Y = Y
 BIRTH_NEURON_ACTIVATION = 0
 SURFACE_ROUGHNESS = 0.6 * SPEED_HACK
 
-defaultHiddenLayersNeuronCount = [5, 4]
-
+defaultHiddenLayersNeuronCount = [6]
