@@ -11,7 +11,7 @@ class Brain:
                  outputLayerNeurons: [str],
                  hiddenLayersNeuronCount: [int] = defaultHiddenLayersNeuronCount):
 
-        print("init:")
+        # print("init:")
         # traceback.print_stack()
 
         self.inputsNames = inputLayerNeurons
@@ -21,13 +21,13 @@ class Brain:
         self.weights = []
         self.neuronLayers = []
 
-        print(len(hiddenLayersNeuronCount))
-        print(self.neuronLayers)
+        # print(len(hiddenLayersNeuronCount))
+        # print(self.neuronLayers)
 
         self.neuronLayers.append(np.zeros((1, len(inputLayerNeurons))))
 
         for i in range(0, len(hiddenLayersNeuronCount)):
-            print("hidden layer", i)
+            # print("hidden layer", i)
 
             self.neuronLayers.append(np.zeros((1, hiddenLayersNeuronCount[i] + 1)))  # '+ 1' bias
 
@@ -36,30 +36,39 @@ class Brain:
         for i in range(0, len(self.neuronLayers) - 1):
             self.weights.append(np.zeros((len(self.neuronLayers[i][0]), len(self.neuronLayers[i + 1][0]))))
 
-        print(self.neuronLayers, "neuron layers")
-        print(self.weights, "weights")
+    #            for k in range(0, len(self.weights)):
+    #                for j in range(0, len(self.weights[k])):
+    #                    for n in range(0, len(self.weights[k][j])):
+    #                        self.weights[k][j][n] = (random() * 2 - 1) * BRAIN_INIT_RANGE
+
+    # print(self.neuronLayers, "neuron layers")
+    # print(self.weights, "weights")
 
     @staticmethod
     def copy(class_instance):
         return copy.deepcopy(class_instance)
 
     def initRandom(self, min=-BRAIN_INIT_RANGE, max=BRAIN_INIT_RANGE):
+        # print("init random brain")
         for n in range(0, len(self.weights)):
             for i in range(0, len(self.weights[n])):
                 for j in range(0, len(self.weights[n][i])):
                     self.weights[n][i][j] = random() * (max - min) + min
+        # print(self.weights)
 
     def calculate(self):
         # print("calculate")
+        self.neuronLayers[0][0][len(self.neuronLayers[0][0]) - 1] = 1.
         for i in range(0, len(self.weights)):
             self.neuronLayers[i + 1] = np.dot(self.neuronLayers[i], self.weights[i])
-            for j in range(0, len(self.neuronLayers[i + 1])):
+            for j in range(0, len(self.neuronLayers[i + 1][0])):
                 self.neuronLayers[i + 1][0][j] = np.tanh(self.neuronLayers[i + 1][0][j])
-                if i != len(self.weights) - 1:
-                    self.neuronLayers[i + 1][0][len(self.neuronLayers[i + 1]) - 1] = 1  # setting bias back to 1
+                if (i != len(self.weights) - 1) & (j == len(self.neuronLayers[i + 1][0]) - 1):  # setting bias back to 1
+                    self.neuronLayers[i + 1][0][j] = 1
 
     def updateInputs(self, input: []):
-        if len(input) != len(self.neuronLayers[0]) - 1:  # '- 1' bias
+        if len(input) != len(self.neuronLayers[0][0]) - 1:  # '- 1' bias
+            print("input error!", len(input), len(self.neuronLayers[0]) - 1)
             return
 
         for i in range(0, len(input)):
