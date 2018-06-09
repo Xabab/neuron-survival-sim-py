@@ -1,18 +1,19 @@
 import copy
 
 import numpy as np
-from numpy.random import uniform as random
+from numpy.random import random
 
 from src.engine.GameConstants import defaultHiddenLayersNeuronCount, BRAIN_INIT_RANGE, MUTAGEN_MULTIPLIER
 
 
 class Brain:
-
     def __init__(self, inputLayerNeurons: [str],
                  outputLayerNeurons: [str],
-                 hiddenLayersNeuronCount: [int] = defaultHiddenLayersNeuronCount,
-                 weights=None, neuronLayers=None):
+                 hiddenLayersNeuronCount: [int] = defaultHiddenLayersNeuronCount):
+
         print("init:")
+        # traceback.print_stack()
+
         self.inputsNames = inputLayerNeurons
         self.inputsNames.append("Bias (1)")
         self.outputsNames = outputLayerNeurons
@@ -33,7 +34,10 @@ class Brain:
         self.neuronLayers.append(np.zeros((1, len(outputLayerNeurons))))
 
         for i in range(0, len(self.neuronLayers) - 1):
-            self.weights.append(np.zeros((len(self.neuronLayers[i]), len(self.neuronLayers[i + 1]))))
+            self.weights.append(np.zeros((len(self.neuronLayers[i][0]), len(self.neuronLayers[i + 1][0]))))
+
+        print(self.neuronLayers, "neuron layers")
+        print(self.weights, "weights")
 
     @staticmethod
     def copy(class_instance):
@@ -43,14 +47,12 @@ class Brain:
         for n in range(0, len(self.weights)):
             for i in range(0, len(self.weights[n])):
                 for j in range(0, len(self.weights[n][i])):
-                    self.weights[n][i][j] = random(0, 1) * (max - min) + min
+                    self.weights[n][i][j] = random() * (max - min) + min
 
     def calculate(self):
-        print((len(self.weights), len(self.neuronLayers)))
-        print(self.neuronLayers)
+        # print("calculate")
         for i in range(0, len(self.weights)):
-            print((len(self.neuronLayers), i))
-            self.neuronLayers[i + 1] = np.dot(self.weights[i], self.neuronLayers[i])
+            self.neuronLayers[i + 1] = np.dot(self.neuronLayers[i], self.weights[i])
             for j in range(0, len(self.neuronLayers[i + 1])):
                 self.neuronLayers[i + 1][0][j] = np.tanh(self.neuronLayers[i + 1][0][j])
                 if i != len(self.weights) - 1:
@@ -67,4 +69,4 @@ class Brain:
         for n in range(0, len(self.weights)):
             for i in range(0, len(self.weights[n])):
                 for j in range(0, len(self.weights[n][i])):
-                    self.weights[n][i][j] += (random(0, 1) * 2 - 1) * MUTAGEN_MULTIPLIER
+                    self.weights[n][i][j] += (random() * 2 - 1) * MUTAGEN_MULTIPLIER

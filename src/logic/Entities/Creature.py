@@ -1,5 +1,5 @@
 import copy
-from random import uniform as random
+from random import random
 
 import numpy as np
 from numpy.core.umath import pi
@@ -21,13 +21,13 @@ class Creature(object):
 
     brain: Brain
 
-    def __init__(self, x: float = random(0, 1) * FIELD_SIZE_X, y: float = random(0, 1) * FIELD_SIZE_Y):
+    def __init__(self, x: float = random() * FIELD_SIZE_X, y: float = random() * FIELD_SIZE_Y):
         self.xy = Vector2d(x, y)
         self.speed = Vector2d(0., 0.)
 
         self.fitness = STARTING_FITNESS
 
-        self.direction = ((random(0, 1) * 2) - 1) * pi * 2
+        self.direction = ((random() * 2) - 1) * pi * 2
 
         self.brain = Brain(["Food dist", "Food dir", "Fitness", "Speed"], ["Eat", "Accelerate", "Turn", "Birth"])
         self.brain.initRandom()
@@ -39,7 +39,7 @@ class Creature(object):
 
         temp.speed = Vector2d(0., 0.)
         temp.fitness = STARTING_FITNESS
-        temp.direction = ((random(0, 1) * 2) - 1) * pi * 2
+        temp.direction = ((random() * 2) - 1) * pi * 2
         temp.brain.mutate()
 
         return temp
@@ -55,8 +55,10 @@ class Creature(object):
     def updateMoving(self):
         self.direction += CREATURE_TURNING_SPEED * self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][2]
 
-        if self.direction > pi: self.direction -= 2 * pi;
-        if self.direction < -pi: self.direction += 2 * pi;
+        if self.direction > pi:
+            self.direction -= 2 * pi
+        if self.direction < -pi:
+            self.direction += 2 * pi
 
         x = self.speed.x * (1 - SURFACE_ROUGHNESS) + ACCELERATION * \
             self.brain.neuronLayers[len(self.brain.neuronLayers) - 1][0][1] * np.cos(self.direction)

@@ -1,8 +1,10 @@
+import glfw
+
 from src.engine.EventsProcessing import *
 from src.engine.GameConstants import X, Y
 from src.gui.Gui import drawGui
 from src.render.GameField import GameFieldDrawer
-from src.render.GameField.GameFieldDrawer import drawGameField
+from src.render.GameField.GameFieldDrawer import GameFieldDrawer
 from src.render.Shapes import *
 
 
@@ -10,7 +12,7 @@ def start():
     if not glfw.init():
         return
 
-    _window = glfw.create_window(X, Y, "Fucking window", None, None)
+    _window = glfw.create_window(X, Y, "Neural survival sim py", None, None)
 
     if not _window:
         glfw.terminate()
@@ -34,31 +36,25 @@ def start():
 
     #######################################
 
-
-
+    g = GameFieldDrawer()
 
     while not glfw.window_should_close(_window):
-        print('render')
+        # print('render')
 
-        GameFieldDrawer.g.update()
+        g.g.update()
 
         glClear(GL_COLOR_BUFFER_BIT)
 
         ##### RENDER HERE #####
         drawGui()
 
-        drawGameField()
+        g.drawGameField()
 
         #######################
-
-        # print(glfw.get_cursor_pos(_window))
-
-        # print(mouseX, mouseY)
 
         glfw.swap_buffers(_window)
 
         glfw.poll_events()
-
 
     glfw.terminate()
 

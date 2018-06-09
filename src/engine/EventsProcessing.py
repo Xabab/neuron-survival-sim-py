@@ -1,5 +1,7 @@
-import glfw
-import OpenGL
+from src.engine.GameConstants import MENU_WIDTH
+from src.gui import Gui
+from src.logic import Game
+
 
 class EventListener:
     mouseX: int = -1
@@ -10,6 +12,17 @@ class EventListener:
 
     def mouseCallback(self, window, button, action, mods):
         print(button, action, (self.mouseX, self.mouseY))
+
+        print("mouse ping")
+
+        if (button == 0) & (action == 1):
+            if self.mouseX > MENU_WIDTH:
+                print("mouse pong 1")
+                Game.g.choseCreature(self.mouseX, self.mouseY)
+            else:
+                for b in Gui.buttons[:]:
+                    print("mouse pong 2")
+                    b.checkForClick(self.mouseX, self.mouseY)
 
     def cursorPositionCallback(self, window, xpos, ypos):
         self.mouseX = xpos

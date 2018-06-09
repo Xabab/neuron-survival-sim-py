@@ -23,9 +23,10 @@ class Button:
         self._posY = posY
         self._title = title
 
-    def checkForClick(self):
-        if ((mouseX > self._posX) & (mouseX < (self._posX + self._sizeX)) &
-                (mouseY > self._posY) & (mouseY < (self._posY + self._sizeY))):
+    def checkForClick(self, x: int, y: int):
+        print("click check")
+        if ((x > self._posX) & (x < (self._posX + self._sizeX)) &
+                (y > self._posY) & (y < (self._posY + self._sizeY))):
             self.onClick()
 
     def onClick(self):

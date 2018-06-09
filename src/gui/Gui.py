@@ -1,16 +1,21 @@
 from src.engine.GameConstants import *
 from src.gui.Button import Button
+from src.logic import Game
 from src.render.Shapes import drawBox
 
+g = Game.g
 
 class ButtonDecSpeed(Button):
     def onClick(self):
-        raise NotImplemented("Decrease speed")
+        Game.g.iterationCount_mm()
+        print("counting " + str(Game.Game.desiredIterationCount) + " iterations per frame")
+
 
 
 class ButtonIncSpeed(Button):
     def onClick(self):
-        raise NotImplemented("Increase speed")
+        Game.g.iterationCount_pp()
+        print("counting " + str(Game.Game.desiredIterationCount) + " iterations per frame")
 
 
 buttons = [ButtonDecSpeed(10, 10, 30, 30, 0, 0, 0, "<<"),  ButtonIncSpeed(50, 10, 30, 30, 0, 0, 0, ">>")]

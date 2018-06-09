@@ -1,30 +1,34 @@
-import numpy as np
-
 from src.logic.Entities.Creature import *
 from src.logic.Entities.FoodPiece import FoodPiece
-from src.logic.GameField import GameField
 from src.logic.Vector2d import Vector2d
 
 
-class Game(GameField):
+class Game:
     desiredIterationCount: int = 1
     theChosenOne: Creature
+    creatures = []
+    food = []
 
     def __init__(self):
-        super(Game, self).__init__()
-        self.init()
+        self.startSpawn()
+
+    def startSpawn(self):
+        for i in range(0, MIN_CREATURES_COUNT):
+            self.creatures.append(Creature())
+        for i in range(0, FOOD_COUNT):
+            self.food.append(FoodPiece(random() * FIELD_SIZE_X, random() * FIELD_SIZE_Y))
 
     def iterationCount_pp(self):
         if self.desiredIterationCount >= 10:
             return
-
-        self.desiredIterationCount += 1
+        print("++")
+        self.desiredIterationCount = self.desiredIterationCount + 1
 
     def iterationCount_mm(self):
         if self.desiredIterationCount <= 0:
             return
-
-        self.desiredIterationCount -= 1
+        print("--")
+        self.desiredIterationCount = self.desiredIterationCount - 1
 
     def update(self):
         for i in range(0, self.desiredIterationCount):
@@ -32,8 +36,6 @@ class Game(GameField):
 
     def findClosestFoodDistanceAndDirection(self, c: Creature):
         dist = 100000.  # inf
-
-        p: FoodPiece
 
         temp = self.food[0]
 
@@ -61,25 +63,25 @@ class Game(GameField):
         temp = Vector2d(-(m2.x - m1.x), m2.y - m1.y)
 
         if (temp.x > 0.) & (temp.y >= 0.):
-            dir = np.arctan(temp.y / temp.y)
+            direction = np.arctan(temp.y / temp.y)
         else:
             if (temp.x > 0.) & (temp.y < 0.):
-                dir = np.arctan(temp.y / temp.x) + 2 * np.pi
+                direction = np.arctan(temp.y / temp.x) + 2 * np.pi
             else:
                 if temp.x < 0.:
-                    dir = np.arctan(temp.y / temp.x) + np.pi
+                    direction = np.arctan(temp.y / temp.x) + np.pi
                 else:
                     if (temp.x == 0.) & (temp.y > 0.):
-                        dir = np.pi / 2
+                        direction = np.pi / 2
                     else:
                         if (temp.y == 0.) & (temp.y < 0.):
-                            dir = 3 * np.pi / 2
+                            direction = 3 * np.pi / 2
                         else:
-                            dir = 0;
+                            direction = 0
 
-        dir += np.pi
+        direction += np.pi
 
-        return Vector2d(temp.length(), dir)
+        return Vector2d(temp.length(), direction)
 
     def creatureClick(self, x: int, y: int):
         for i in range(0, len(self.creatures)):
@@ -88,13 +90,15 @@ class Game(GameField):
         return None
 
     def choseCreature(self, x: int, y: int):
-        if x < 0: return
+        if len(self.creatures) <= 0:
+            return
         self.theChosenOne = self.creatureClick(x, y)
 
     def iteration(self):
-        print("iteraton")
+        # print("iteration")
         # spawn new if needed
-        while len(self.creatures) < MIN_CREATURES_COUNT:
+        for i in range(len(self.creatures), MIN_CREATURES_COUNT):
+            print("creature spawn in iteration", i)
             self.creatures.append(Creature())
 
         # spawn food if needed
@@ -132,12 +136,15 @@ class Game(GameField):
         # give birth
 
         for c in range(0, len(self.creatures)):
-            if self.creatures[c].brain.neuronLayers[len(self.creatures[c].brain.neuronLayers) - 1][0][
-                3] > BIRTH_NEURON_ACTIVATION:
+            if self.creatures[c].brain.neuronLayers[len(self.creatures[c].brain.neuronLayers) - 1][0][3] \
+                    > BIRTH_NEURON_ACTIVATION:
                 if self.creatures[c].fitness > BIRTH_FITNESS_COST:
                     self.creatures.append(self.creatures[c].giveBirth())  # else creature.feed(- BIRTH_FITNESS_COST);
 
         for c in self.creatures[:]:
             if c.fitness < 0:
-                print("dead")
+                print("dead ☠")
                 self.creatures.remove(c)
+
+
+g = Game()

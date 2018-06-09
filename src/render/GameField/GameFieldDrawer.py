@@ -1,22 +1,23 @@
 from src.engine.GameConstants import *
-from src.logic.Game import Game
+from src.logic import Game
 from src.render.Shapes import drawEfCircle
 
-g = Game()
 
-def drawGameField():
-    if len(g.creatures) != 0:
-        drawCreatures()
+class GameFieldDrawer:
+    g = Game.g
 
-    if len(g.food) != 0:
-        drawFood()
+    def drawGameField(self):
+        if len(self.g.creatures) != 0:
+            self.drawCreatures()
 
+        if len(self.g.food) != 0:
+            self.drawFood()
 
-def drawCreatures():
-    for i in range(0, len(g.creatures)):
-        drawEfCircle(FIELD_X_OFFSET + g.creatures[i].xy.x, g.creatures[i].xy.y, CREATURE_SIZE, 10, 0, 1, 0)
+    def drawCreatures(self):
+        for i in range(0, len(self.g.creatures)):
+            drawEfCircle(FIELD_X_OFFSET + self.g.creatures[i].xy.x, self.g.creatures[i].xy.y, CREATURE_SIZE, 10, 0, 1,
+                         0)
 
-
-def drawFood():
-    for i in range(0, len(g.food)):
-        drawEfCircle(FIELD_X_OFFSET + g.food[i].xy.x, g.food[i].xy.y, 2, 4, 1, 1, 0.3)
+    def drawFood(self):
+        for i in range(0, len(self.g.food)):
+            drawEfCircle(FIELD_X_OFFSET + self.g.food[i].xy.x, self.g.food[i].xy.y, 2, 4, 1, 1, 0.3)

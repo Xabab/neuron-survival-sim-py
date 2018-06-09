@@ -6,6 +6,8 @@
 #
 #
 
+import cProfile
+
 from src.engine.Window import start
 
-start()
+cProfile.run(start())
