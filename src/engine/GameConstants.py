@@ -1,5 +1,5 @@
-X = 800
-Y = 600
+X = 840
+Y = 700
 MENU_WIDTH = 140
 
 SPEED_HACK = 0.2

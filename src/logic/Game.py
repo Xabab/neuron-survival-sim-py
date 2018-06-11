@@ -1,4 +1,4 @@
-import math
+from math import tanh, atan, tau
 
 from src.logic.Entities.Creature import *
 from src.logic.Entities.FoodPiece import FoodPiece
@@ -10,8 +10,10 @@ class Game:
     theChosenOne: Creature = None
     creatures = []
     food = []
+    sightCircle = []
 
     def __init__(self):
+
         self.startSpawn()
 
     def startSpawn(self):
@@ -65,23 +67,29 @@ class Game:
         temp = Vector2d(-(m2.x - m1.x), m2.y - m1.y)
 
         if (temp.x > 0.) & (temp.y >= 0.):
-            direction = math.atan(temp.y / temp.x)
+            direction = atan(temp.y / temp.x)
         else:
             if (temp.x > 0.) & (temp.y < 0.):
-                direction = math.atan(temp.y / temp.x)  # + 2 * np.pi
+                direction = atan(temp.y / temp.x)
             else:
                 if temp.x < 0.:
-                    direction = math.atan(temp.y / temp.x) + pi
+                    direction = atan(temp.y / temp.x) - pi
                 else:
-                    if (temp.x == 0.) & (temp.y > 0.):
+                    if (temp.x == 0.) & (temp.y > 0.):  # redundant
                         direction = pi / 2
                     else:
-                        if (temp.y == 0.) & (temp.y < 0.):
+                        if (temp.y == 0.) & (temp.y < 0.):  # redundant
                             direction = 3 * pi / 2
                         else:
-                            direction = 0
+                            direction = 0  # redundant
 
         direction += pi
+
+        while direction < (-pi):
+            direction += tau
+
+        while direction > (pi):
+            direction -= tau
 
         return Vector2d(temp.length(), direction)
 
@@ -108,18 +116,19 @@ class Game:
 
         # spawn food if needed
         while len(self.food) < FOOD_COUNT:
-            self.food.append(FoodPiece())
+            self.food.append(FoodPiece(random() * FIELD_SIZE_X, random() * FIELD_SIZE_Y))
 
         for c in range(0, len(self.creatures)):
             # todo optimise food search: next line takes 2/3 of computation time!
             tmp = self.findClosestFoodDistanceAndDirection(self.creatures[c])
-            # tmp = Vector2d(1, pi)
+            # tmp = Vector2d(1, -pi)
+
 
             # todo fix input ranges
             # update inputs
             self.creatures[c].updateInputs([
-                tanh(FIELD_SIZE_X / (2 * CREATURE_SIZE) / tmp.x),
-                tanh(tmp.y),
+                tanh((FIELD_SIZE_X / 10) / tmp.x),
+                tanh(tmp.y),  # 2d input done
                 tanh(BIRTH_FITNESS_COST / self.creatures[c].fitness),
                 tanh(CREATURE_SPEED / (self.creatures[c].speed.length() + 0.000001))
             ])
