@@ -1,5 +1,5 @@
-from OpenGL.GLUT import *
 from OpenGL.GL import *
+from OpenGL.GLUT import *
 
 from src.engine.GameConstants import Y
 
@@ -14,7 +14,7 @@ def text(x: int, y: int, text: str, cR: float, cG: float, cB: float):
     ch = 0
 
     while ch < len(text):
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_10, ctypes.c_int(ord(text[ch])))
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ctypes.c_int(ord(text[ch])))
         ch += 1
 
 

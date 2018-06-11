@@ -1,10 +1,10 @@
 import glfw
+from OpenGL.raw.GLUT import glutInitDisplayMode, GLUT_ALPHA
 
 from src.engine.EventsProcessing import *
 from src.engine.GameConstants import X, Y
-from src.gui.Gui import drawGui
-from src.render.GameField import GameFieldDrawer
-from src.render.GameField.GameFieldDrawer import GameFieldDrawer
+from src.render.GameField import GameDrawer
+from src.render.GameField.GameDrawer import GameDrawer
 from src.render.Shapes import *
 
 
@@ -27,8 +27,22 @@ def start():
     glOrtho(0, X, Y, 0, -1, 1)
     glMatrixMode(GL_MODELVIEW)
 
-    eventListener = EventListener()
+    #######################################
+
+    # SETTING UP GRAPHICS #################
+    glutInitDisplayMode(GLUT_ALPHA)
+
     glClearColor(1, 0, 1, 1.0)
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA)
+    glEnable(GL_BLEND)
+    glCullFace(GL_BACK)
+
+    #######################################
+
+    # SETTING UP EVENT LISTENER ###########
+
+    eventListener = EventListener()
 
     glfw.set_key_callback(_window, eventListener.keyCallback)
     glfw.set_mouse_button_callback(_window, eventListener.mouseCallback)
@@ -36,7 +50,7 @@ def start():
 
     #######################################
 
-    g = GameFieldDrawer()
+    g = GameDrawer()
 
     while not glfw.window_should_close(_window):
         # print('render')
@@ -46,10 +60,7 @@ def start():
         glClear(GL_COLOR_BUFFER_BIT)
 
         ##### RENDER HERE #####
-        drawGui()
-
-        g.drawGameField()
-
+        g.drawGame()
         #######################
 
         glfw.swap_buffers(_window)

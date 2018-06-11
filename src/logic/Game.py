@@ -1,5 +1,6 @@
 from math import tanh, atan, tau
 
+from src.engine import GameConstants
 from src.logic.Entities.Creature import *
 from src.logic.Entities.FoodPiece import FoodPiece
 from src.logic.Vector2d import Vector2d
@@ -11,8 +12,19 @@ class Game:
     creatures = []
     food = []
     sightCircle = []
+    DIST_NEURON_MAGICAL_CONSTANT: float
 
     def __init__(self):
+        if FOG_OF_WAR:
+            self.DIST_NEURON_MAGICAL_CONSTANT = SIGHT_DISTANCE / 10
+            for x in range(-GameConstants.SIGHT_DISTANCE_CELLS, GameConstants.SIGHT_DISTANCE_CELLS):
+                for y in range(-GameConstants.SIGHT_DISTANCE_CELLS, GameConstants.SIGHT_DISTANCE_CELLS):
+                    if sqrt((x * CELL_SIZE) ** 2 + (y * CELL_SIZE) ** 2) < GameConstants.SIGHT_DISTANCE / 2 + CELL_SIZE:
+                        self.sightCircle.append([x, y])
+
+            print(self.sightCircle)
+        else:
+            self.DIST_NEURON_MAGICAL_CONSTANT = FIELD_SIZE_X / (CREATURE_SIZE * 2)
 
         self.startSpawn()
 
@@ -38,32 +50,57 @@ class Game:
         for i in range(0, self.desiredIterationCount):
             self.iteration()
 
+    def inSightCell(self, c: Creature, f: FoodPiece) -> bool:
+        if not FOG_OF_WAR:
+            return True
+
+        relativeCellX = int(f.xy.x / CELL_SIZE) - int(c.xy.x / CELL_SIZE)
+        relativeCellY = int(f.xy.y / CELL_SIZE) - int(c.xy.y / CELL_SIZE)
+
+        if (abs(relativeCellX) > SIGHT_DISTANCE_CELLS) | (abs(relativeCellY) > SIGHT_DISTANCE_CELLS):
+            return False
+
+        for s in range(0, len(self.sightCircle)):
+            if self.sightCircle[s][0] == relativeCellX:
+                if self.sightCircle[s][1] == relativeCellY:
+                    return True
+
+        return False
+
     def findClosestFoodDistanceAndDirection(self, c: Creature):
         dist = 100000.  # inf
 
         temp = self.food[0]
 
-        for i in self.food[:]:
-            out = Game.findDistanceAndDirection(c.xy, i.xy)
+        for f in self.food[:]:
+            if not self.inSightCell(c, f):
+                continue
+            dt = sqrt((c.xy.x - f.xy.x) ** 2 + (c.xy.y - f.xy.y) ** 2)
 
-            d = out.x
+            if FOG_OF_WAR & (dt > SIGHT_DISTANCE / 2):
+                continue
+
+            d = dt
 
             if d < dist:
                 dist = d
-                temp = i
+                temp = f
 
             # check for food collisions and eat
 
-            if out.x < CREATURE_SIZE:  # & "Eat" neuron > 0
+            if d < CREATURE_SIZE:  # & "Eat" neuron > 0
                 c.feed(FOOD_COST)
-                self.food.remove(i)
+                self.food.remove(f)
 
-        out = Game.findDistanceAndDirection(c.xy, temp.xy)
+        if dist == 100000.:
+            return Vector2d(100000., 0)
+
+        out = Game.distanceAndDirection(c.xy, temp.xy, c)
 
         return out
 
     @staticmethod
-    def findDistanceAndDirection(m1: Vector2d, m2: Vector2d):
+    def distanceAndDirection(m1: Vector2d, m2: Vector2d, c: Creature):
         temp = Vector2d(-(m2.x - m1.x), m2.y - m1.y)
 
         if (temp.x > 0.) & (temp.y >= 0.):
@@ -83,7 +120,7 @@ class Game:
                         else:
                             direction = 0  # redundant
 
-        direction += pi
+        direction += pi + c.direction  # -dir
 
         while direction < (-pi):
             direction += tau
@@ -91,7 +128,7 @@ class Game:
         while direction > (pi):
             direction -= tau
 
-        return Vector2d(temp.length(), direction)
+        return Vector2d(temp.length(), -direction)
 
     def creatureClick(self, x: int, y: int):
         c: Creature
@@ -119,21 +156,25 @@ class Game:
             self.food.append(FoodPiece(random() * FIELD_SIZE_X, random() * FIELD_SIZE_Y))
 
         for c in range(0, len(self.creatures)):
-            # todo optimise food search: next line takes 2/3 of computation time!
             tmp = self.findClosestFoodDistanceAndDirection(self.creatures[c])
             # tmp = Vector2d(1, -pi)
 
-
-            # todo fix input ranges
             # update inputs
             self.creatures[c].updateInputs([
-                tanh((FIELD_SIZE_X / 10) / tmp.x),  # 1st input done
-                tanh(tmp.y),  # 2d input done
+                2 * tanh((self.DIST_NEURON_MAGICAL_CONSTANT / tmp.x)) - 1,  # 1st input done
+                tanh(tmp.y / pi * 4),  # done
                 tanh((self.creatures[c].fitness / BIRTH_FITNESS_COST) * 6 - 3),  # 3d done
-                tanh((self.creatures[c].speed.length() + 0.000001) / CREATURE_SPEED * 6 - 3)  #
+                tanh((self.creatures[c].speed.length() + 0.000001) / CREATURE_SPEED * 6 - 3)  # 4th done
             ])
 
-            self.creatures[c].updateInfo([tmp.x, -tmp.y, self.creatures[c].fitness, self.creatures[c].speed.length()])
+            dirTmp = tmp.y + self.creatures[c].direction
+            while dirTmp < (-pi):
+                dirTmp += tau
+
+            while dirTmp > (pi):
+                dirTmp -= tau
+
+            self.creatures[c].updateInfo([tmp.x, dirTmp, self.creatures[c].fitness, self.creatures[c].speed.length()])
 
             # update creatures
             self.creatures[c].updateCreature()

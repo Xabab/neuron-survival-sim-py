@@ -2,7 +2,6 @@ from src.render.Shapes import *
 from src.render.Text import *
 
 
-
 class Button:
     def __init__(self, posX: int, posY: int, sizeX: int, sizeY: int, cR: float, cG: float, cB: float, title: str):
         self._cR = cR
@@ -15,7 +14,7 @@ class Button:
         self._title = title
 
     def checkForClick(self, x: int, y: int):
-        print("click check")
+        # print("click check")
         if ((x > self._posX) & (x < (self._posX + self._sizeX)) &
                 (y > self._posY) & (y < (self._posY + self._sizeY))):
             self.onClick()
@@ -24,6 +23,6 @@ class Button:
         raise NotImplemented("Define onClick() function in a child class!")
 
     def drawButton(self):
-        drawBox(self._posX, self._posY, self._sizeX, self._sizeY, self._cR, self._cG, self._cB)
+        drawBox(self._posX, self._posY, self._sizeX, self._sizeY, GL_POLYGON, self._cR, self._cG, self._cB)
 
         text(self._posX + 9, self._posY + 16, self._title, 1, 1, 1)

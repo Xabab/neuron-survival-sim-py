@@ -1,9 +1,7 @@
 from time import time as t
 
-from src.engine.GameConstants import *
 from src.gui.Button import Button
 from src.logic import Game
-from src.render.Shapes import drawBox
 from src.render.Text import text
 
 g = Game.g
@@ -33,8 +31,6 @@ def drawButtons():
 
 
 def drawGui(time=[_time], fps=[_fps], counter=[_counter]):
-    drawBox(0, 0, X, Y, 0.2, 0.25, 0.2)
-    drawBox(0, 0, MENU_WIDTH, Y, 0.4, 0.4, 0.43)
     drawButtons()
 
     if time[0] is None:
