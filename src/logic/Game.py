@@ -127,10 +127,10 @@ class Game:
             # todo fix input ranges
             # update inputs
             self.creatures[c].updateInputs([
-                tanh((FIELD_SIZE_X / 10) / tmp.x),
+                tanh((FIELD_SIZE_X / 10) / tmp.x),  # 1st input done
                 tanh(tmp.y),  # 2d input done
-                tanh(BIRTH_FITNESS_COST / self.creatures[c].fitness),
-                tanh(CREATURE_SPEED / (self.creatures[c].speed.length() + 0.000001))
+                tanh((self.creatures[c].fitness / BIRTH_FITNESS_COST) * 6 - 3),  # 3d done
+                tanh((self.creatures[c].speed.length() + 0.000001) / CREATURE_SPEED * 6 - 3)  #
             ])
 
             self.creatures[c].updateInfo([tmp.x, -tmp.y, self.creatures[c].fitness, self.creatures[c].speed.length()])

@@ -49,4 +49,4 @@ def drawGui(time=[_time], fps=[_fps], counter=[_counter]):
     else:
         counter[0] += 1
 
-    text(0, 10, "fps: " + str(fps[0]), 1, 1, 1)
+    text(0, 10, "fps: " + str(fps[0]) + " iterations: " + str(fps[0] * g.desiredIterationCount), 1, 1, 1)
