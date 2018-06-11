@@ -45,14 +45,14 @@ class GameFieldDrawer:
         for i in range(0, len(c.brain.neuronLayers)):
             y = 300
             for n in range(0, len(c.brain.neuronLayers[i][0])):
-                text(x, y, str(round(c.brain.neuronLayers[i][0][n], 2)), 1, 1, 1)
+                text(x, y, str(round(c.brain.neuronLayers[i][0][n], 4)), 1, 1, 1)
                 y += 10
-            x += 30
+            x += 40
 
     def drawCreatures(self):
         for i in range(0, len(self.g.creatures)):
             c = self.g.creatures[i]
-            temp = STARTING_FITNESS / c.fitness
+            temp = c.fitness / STARTING_FITNESS
 
             if temp > 1:
                 temp = 1

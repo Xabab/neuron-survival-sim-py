@@ -4,15 +4,6 @@ from src.render.Text import *
 
 
 class Button:
-    _cR: float
-    _cG: float
-    _cB: float
-    _sizeX: int
-    _sizeY: int
-    _posX: int
-    _posY: int
-    _title: str
-
     def __init__(self, posX: int, posY: int, sizeX: int, sizeY: int, cR: float, cG: float, cB: float, title: str):
         self._cR = cR
         self._cG = cG

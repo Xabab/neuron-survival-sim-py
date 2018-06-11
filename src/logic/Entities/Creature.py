@@ -9,6 +9,8 @@ from src.logic.Entities.Brain import Brain
 from src.logic.Vector2d import Vector2d
 
 
+# todo fix birth
+
 class Creature(object):
     def __init__(self, x: float = random() * FIELD_SIZE_X, y: float = random() * FIELD_SIZE_Y):
 

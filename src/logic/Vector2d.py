@@ -1,8 +1,6 @@
 from numpy import *
 
 class Vector2d:
-    x: float
-    y: float
 
     def setVector(self, x: float, y: float):
         self.x = x

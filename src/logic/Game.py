@@ -63,7 +63,7 @@ class Game:
         temp = Vector2d(-(m2.x - m1.x), m2.y - m1.y)
 
         if (temp.x > 0.) & (temp.y >= 0.):
-            direction = np.arctan(temp.y / temp.y)
+            direction = np.arctan(temp.y / temp.x)
         else:
             if (temp.x > 0.) & (temp.y < 0.):
                 direction = np.arctan(temp.y / temp.x)  # + 2 * np.pi
@@ -109,11 +109,14 @@ class Game:
             self.food.append(FoodPiece())
 
         for c in range(0, len(self.creatures)):
-            tmp = self.findClosestFoodDistanceAndDirection(self.creatures[c])
+            # todo optimise food search: next line takes 2/3 of computation time!
+            # tmp =  self.findClosestFoodDistanceAndDirection(self.creatures[c])
+            tmp = Vector2d(1, 1)
 
+            # todo fix input ranges
             # update inputs
             self.creatures[c].updateInputs([
-                np.tanh(FIELD_SIZE_X / (7 + CREATURE_SIZE) / tmp.x),
+                np.tanh(FIELD_SIZE_X / (2 * CREATURE_SIZE) / tmp.x),
                 np.tanh(tmp.y / pi),
                 np.tanh(BIRTH_FITNESS_COST / self.creatures[c].fitness),
                 np.tanh(CREATURE_SPEED / self.creatures[c].speed.length())
