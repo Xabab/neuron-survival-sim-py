@@ -1,3 +1,5 @@
+import math
+
 from src.logic.Entities.Creature import *
 from src.logic.Entities.FoodPiece import FoodPiece
 from src.logic.Vector2d import Vector2d
@@ -63,23 +65,23 @@ class Game:
         temp = Vector2d(-(m2.x - m1.x), m2.y - m1.y)
 
         if (temp.x > 0.) & (temp.y >= 0.):
-            direction = np.arctan(temp.y / temp.x)
+            direction = math.atan(temp.y / temp.x)
         else:
             if (temp.x > 0.) & (temp.y < 0.):
-                direction = np.arctan(temp.y / temp.x)  # + 2 * np.pi
+                direction = math.atan(temp.y / temp.x)  # + 2 * np.pi
             else:
                 if temp.x < 0.:
-                    direction = np.arctan(temp.y / temp.x) + np.pi
+                    direction = math.atan(temp.y / temp.x) + pi
                 else:
                     if (temp.x == 0.) & (temp.y > 0.):
-                        direction = np.pi / 2
+                        direction = pi / 2
                     else:
                         if (temp.y == 0.) & (temp.y < 0.):
-                            direction = 3 * np.pi / 2
+                            direction = 3 * pi / 2
                         else:
                             direction = 0
 
-        direction += np.pi
+        direction += pi
 
         return Vector2d(temp.length(), direction)
 
@@ -110,16 +112,16 @@ class Game:
 
         for c in range(0, len(self.creatures)):
             # todo optimise food search: next line takes 2/3 of computation time!
-            # tmp =  self.findClosestFoodDistanceAndDirection(self.creatures[c])
-            tmp = Vector2d(1, 1)
+            tmp = self.findClosestFoodDistanceAndDirection(self.creatures[c])
+            # tmp = Vector2d(1, pi)
 
             # todo fix input ranges
             # update inputs
             self.creatures[c].updateInputs([
-                np.tanh(FIELD_SIZE_X / (2 * CREATURE_SIZE) / tmp.x),
-                np.tanh(tmp.y / pi),
-                np.tanh(BIRTH_FITNESS_COST / self.creatures[c].fitness),
-                np.tanh(CREATURE_SPEED / self.creatures[c].speed.length())
+                tanh(FIELD_SIZE_X / (2 * CREATURE_SIZE) / tmp.x),
+                tanh(tmp.y),
+                tanh(BIRTH_FITNESS_COST / self.creatures[c].fitness),
+                tanh(CREATURE_SPEED / (self.creatures[c].speed.length() + 0.000001))
             ])
 
             self.creatures[c].updateInfo([tmp.x, -tmp.y, self.creatures[c].fitness, self.creatures[c].speed.length()])

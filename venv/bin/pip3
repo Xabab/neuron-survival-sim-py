@@ -1,4 +1,4 @@
-#!/home/xabab/workspace/Python/neuron-survival-py/venv/bin/python
+#!/home/xabab/workspace/Python/neuron-survival-sim-py/venv/bin/python
 # EASY-INSTALL-ENTRY-SCRIPT: 'pip==9.0.3','console_scripts','pip3'
 __requires__ = 'pip==9.0.3'
 import re

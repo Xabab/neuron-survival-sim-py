@@ -1,4 +1,4 @@
-from numpy import *
+from math import sqrt
 
 class Vector2d:
 
@@ -30,3 +30,6 @@ class Vector2d:
     def length(self):
         return sqrt(self.x*self.x + self.y*self.y)
 
+    @staticmethod
+    def sqrt(x: float):
+        pass

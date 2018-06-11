@@ -52,14 +52,8 @@ class GameFieldDrawer:
     def drawCreatures(self):
         for i in range(0, len(self.g.creatures)):
             c = self.g.creatures[i]
-            temp = c.fitness / STARTING_FITNESS
 
-            if temp > 1:
-                temp = 1
-            if temp < 0:
-                temp = 0
-
-            drawEfCircle(FIELD_X_OFFSET + c.xy.x, c.xy.y, CREATURE_SIZE, 10, 0, temp, 0)
+            drawEfCircle(FIELD_X_OFFSET + c.xy.x, c.xy.y, CREATURE_SIZE, 10, 0, c.fitness / STARTING_FITNESS, 0)
             drawLine(int(FIELD_X_OFFSET + c.xy.x), int(c.xy.y),
                      int(FIELD_X_OFFSET + (c.xy.x + cos(c.direction) * CREATURE_SIZE)),
                      int((c.xy.y + sin(c.direction) * CREATURE_SIZE)), 1, 0.3, 0.3, 1)
