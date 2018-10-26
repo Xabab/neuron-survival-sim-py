@@ -1,6 +1,6 @@
-from src.engine.GameConstants import MENU_WIDTH
-from src.gui import Gui
-from src.logic import Game
+from engine.GameConstants import MENU_WIDTH
+from gui import Gui
+from logic import Game
 
 
 class EventListener:

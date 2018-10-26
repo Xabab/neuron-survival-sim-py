@@ -1,18 +1,20 @@
 import glfw
 from OpenGL.raw.GLUT import glutInitDisplayMode, GLUT_ALPHA
 
-from src.engine.EventsProcessing import *
-from src.engine.GameConstants import X, Y
-from src.render.GameField import GameDrawer
-from src.render.GameField.GameDrawer import GameDrawer
-from src.render.Shapes import *
+from engine.EventsProcessing import *
+from engine.GameConstants import *
+from render.GameField.GameDrawer import GameDrawer
+from render.Shapes import *
 
 
 def start():
+    print("window")
     if not glfw.init():
+        print("glfw init error")
         return
 
-    _window = glfw.create_window(X, Y, "Neural survival sim py", None, None)
+    _window = glfw.create_window(X, Y, "Neural survival sim 2.0rc (Python version). Click on creature for extras", None,
+                                 None)
 
     if not _window:
         glfw.terminate()

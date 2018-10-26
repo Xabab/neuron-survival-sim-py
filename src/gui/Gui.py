@@ -1,8 +1,8 @@
 from time import time as t
 
-from src.gui.Button import Button
-from src.logic import Game
-from src.render.Text import text
+from gui.Button import Button
+from logic import Game
+from render.Text import text
 
 g = Game.g
 _time: int = None

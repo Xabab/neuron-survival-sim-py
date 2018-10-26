@@ -1,10 +1,9 @@
+from engine.GameConstants import *
+from gui.Gui import drawGui
+from logic import Game
 from numpy.core.umath import sin, cos
-
-from src.engine.GameConstants import *
-from src.gui.Gui import drawGui
-from src.logic import Game
-from src.render.Shapes import drawEfCircle, drawLine, drawBox, GL_LINE_LOOP, GL_POLYGON
-from src.render.Text import text
+from render.Shapes import drawEfCircle, drawLine, drawBox, GL_LINE_LOOP, GL_POLYGON
+from render.Text import text
 
 
 class GameDrawer:

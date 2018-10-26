@@ -1,9 +1,9 @@
 from math import tanh, atan, tau
 
-from src.engine import GameConstants
-from src.logic.Entities.Creature import *
-from src.logic.Entities.FoodPiece import FoodPiece
-from src.logic.Vector2d import Vector2d
+from engine import GameConstants
+from logic.Entities.Creature import *
+from logic.Entities.FoodPiece import FoodPiece
+from logic.Vector2d import Vector2d
 
 
 class Game:
@@ -163,7 +163,7 @@ class Game:
             self.creatures[c].updateInputs([
                 2 * tanh((self.DIST_NEURON_MAGICAL_CONSTANT / tmp.x)) - 1,  # 1st input done
                 tanh(tmp.y / pi * 4),  # done
-                tanh((self.creatures[c].fitness / BIRTH_FITNESS_COST) * 6 - 3),  # 3d done
+                tanh((self.creatures[c].fitness / BIRTH_FITNESS_COST / 2) * 6 - 3),  # 3d done
                 tanh((self.creatures[c].speed.length() + 0.000001) / CREATURE_SPEED * 6 - 3)  # 4th done
             ])
 
@@ -197,7 +197,7 @@ class Game:
         for c in range(0, len(self.creatures)):
             if self.creatures[c].brain.neuronLayers[len(self.creatures[c].brain.neuronLayers) - 1][0][3] \
                     > BIRTH_NEURON_ACTIVATION:
-                if self.creatures[c].fitness > BIRTH_FITNESS_COST:
+                if self.creatures[c].fitness > BIRTH_FITNESS_REQUIRMENT:
                     self.creatures.append(self.creatures[c].giveBirth())  # else creature.feed(- BIRTH_FITNESS_COST);
 
         for c in self.creatures[:]:

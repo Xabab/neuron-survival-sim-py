@@ -1,4 +1,4 @@
-from src.logic import Vector2d
+from logic import Vector2d
 
 
 class FoodPiece:

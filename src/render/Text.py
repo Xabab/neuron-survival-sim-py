@@ -1,7 +1,7 @@
 from OpenGL.GL import *
 from OpenGL.GLUT import *
 
-from src.engine.GameConstants import Y
+from engine.GameConstants import Y
 
 
 def text(x: int, y: int, text: str, cR: float, cG: float, cB: float):

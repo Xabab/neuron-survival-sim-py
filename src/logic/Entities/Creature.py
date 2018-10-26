@@ -1,11 +1,10 @@
 import copy
 from math import sin, cos, pi, sqrt
 
+from engine.GameConstants import *
+from logic.Entities.Brain import Brain
+from logic.Vector2d import Vector2d
 from numpy.random import random
-
-from src.engine.GameConstants import *
-from src.logic.Entities.Brain import Brain
-from src.logic.Vector2d import Vector2d
 
 
 # todo fix birth

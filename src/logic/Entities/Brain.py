@@ -1,9 +1,8 @@
 import copy
 
 import numpy as np
+from engine.GameConstants import defaultHiddenLayersNeuronCount, BRAIN_INIT_RANGE, MUTAGEN_MULTIPLIER
 from numpy.random import random
-
-from src.engine.GameConstants import defaultHiddenLayersNeuronCount, BRAIN_INIT_RANGE, MUTAGEN_MULTIPLIER
 
 
 class Brain:

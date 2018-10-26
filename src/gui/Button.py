@@ -1,5 +1,5 @@
-from src.render.Shapes import *
-from src.render.Text import *
+from render.Shapes import *
+from render.Text import *
 
 
 class Button:
