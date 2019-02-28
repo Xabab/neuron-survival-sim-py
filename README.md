@@ -3,4 +3,4 @@ Continuation of my https://github.com/Xabab/neural-survival-sim but on python. I
 
 Fixed several breaking bugs, now it actually works. You can change different settings in separete text file, called GameConstants.
 
-Still a laggig mess because of Python memory management. I Want to rewrite it in C++.
+Still a laggig mess because of Python memory management. I want to rewrite it in C++.
