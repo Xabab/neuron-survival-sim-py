@@ -1,0 +1,4 @@
+# neuron-survival-sim-py
+Continuation of my https://github.com/Xabab/neural-survival-sim but on python. It was rewritten to a working prototype in less than a week, including learning python.
+
+Fixed several breaking bugs, now it actually works. You can change different settings in separete text file, called GameConstants.
