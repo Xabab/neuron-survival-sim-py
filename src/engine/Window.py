@@ -57,7 +57,7 @@ def start():
     while not glfw.window_should_close(_window):
         # print('render')
 
-        g.g.update()
+        g.gameField.update()
 
         glClear(GL_COLOR_BUFFER_BIT)
 

@@ -1,13 +1,14 @@
+from numpy.core.umath import sin, cos
+
 from engine.GameConstants import *
 from gui.Gui import drawGui
 from logic import Game
-from numpy.core.umath import sin, cos
 from render.Shapes import drawEfCircle, drawLine, drawBox, GL_LINE_LOOP, GL_POLYGON
 from render.Text import text
 
 
 class GameDrawer:
-    g = Game.g
+    gameField = Game.g
 
     def drawGame(self):
         # field and creatures
@@ -15,16 +16,16 @@ class GameDrawer:
 
         self.drawGrid()
 
-        if self.g.theChosenOne is not None:
-            if self.g.theChosenOne.fitness < 0:
-                self.g.theChosenOne = None
+        if self.gameField.theChosenOne is not None:
+            if self.gameField.theChosenOne.fitness < 0:
+                self.gameField.theChosenOne = None
             else:
                 self.drawChosenOne()
 
-        if len(self.g.creatures) != 0:
+        if len(self.gameField.creatures) != 0:
             self.drawCreatures()
 
-        if len(self.g.food) != 0:
+        if len(self.gameField.food) != 0:
             self.drawFood()
 
         # gui
@@ -32,14 +33,14 @@ class GameDrawer:
 
         drawGui()
 
-        if self.g.theChosenOne is not None:
-            if self.g.theChosenOne.fitness < 0:
-                self.g.theChosenOne = None
+        if self.gameField.theChosenOne is not None:
+            if self.gameField.theChosenOne.fitness < 0:
+                self.gameField.theChosenOne = None
             else:
                 self.drawTheChosenOneInfo()
 
     def drawChosenOne(self):
-        c = self.g.theChosenOne
+        c = self.gameField.theChosenOne
 
         if FOG_OF_WAR:
             cellX = int(c.xy.x / CELL_SIZE)
@@ -61,7 +62,7 @@ class GameDrawer:
         drawEfCircle(int(c.xy.x + FIELD_X_OFFSET), int(c.xy.y), int(CREATURE_SIZE * 1.4), 15, GL_POLYGON, 0.3, 0.3, 0.7)
 
     def drawTheChosenOneInfo(self):
-        c = self.g.theChosenOne
+        c = self.gameField.theChosenOne
 
         text(5, 80, "Direction (y axis inverted)", 1, 1, 1)
         text(20, 95, str(round(c.direction, 2)), 1, 1, 1)
@@ -90,8 +91,8 @@ class GameDrawer:
             x += 35
 
     def drawCreatures(self):
-        for i in range(0, len(self.g.creatures)):
-            c = self.g.creatures[i]
+        for i in range(0, len(self.gameField.creatures)):
+            c = self.gameField.creatures[i]
 
             # creature
             drawEfCircle(FIELD_X_OFFSET + c.xy.x, c.xy.y, CREATURE_SIZE, 10, GL_POLYGON, 0,
@@ -107,8 +108,9 @@ class GameDrawer:
                          int((c.xy.y + sin(c.debug_info[1]) * c.debug_info[0])), 1, 1, 0.3, 0.3)
 
     def drawFood(self):
-        for i in range(0, len(self.g.food)):
-            drawEfCircle(FIELD_X_OFFSET + self.g.food[i].xy.x, self.g.food[i].xy.y, 2, 4, GL_POLYGON, 1, 1, 0.3)
+        for i in range(0, len(self.gameField.food)):
+            drawEfCircle(FIELD_X_OFFSET + self.gameField.food[i].xy.x, self.gameField.food[i].xy.y, 2, 4, GL_POLYGON, 1,
+                         1, 0.3)
 
     def drawGrid(self):
         r, g, b = 0.2, 0.28, 0.24

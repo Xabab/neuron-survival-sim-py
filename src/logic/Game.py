@@ -16,7 +16,7 @@ class Game:
 
     def __init__(self):
         if FOG_OF_WAR:
-            self.DIST_NEURON_MAGICAL_CONSTANT = SIGHT_DISTANCE / 10
+            self.DIST_NEURON_MAGICAL_CONSTANT = SIGHT_DISTANCE / 10  # UPD: wtf is that?
             for x in range(-GameConstants.SIGHT_DISTANCE_CELLS, GameConstants.SIGHT_DISTANCE_CELLS):
                 for y in range(-GameConstants.SIGHT_DISTANCE_CELLS, GameConstants.SIGHT_DISTANCE_CELLS):
                     if sqrt((x * CELL_SIZE) ** 2 + (y * CELL_SIZE) ** 2) < GameConstants.SIGHT_DISTANCE / 2 + CELL_SIZE:
